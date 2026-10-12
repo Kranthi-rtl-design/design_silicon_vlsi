@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Quote, Sparkles, CheckCircle2, ChevronRight, X, Award } from 'lucide-react';
+import { assetPath } from '../../utils/assetPath';
 
 export const FounderMessage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -12,7 +13,7 @@ export const FounderMessage: React.FC = () => {
           <div className="lg:col-span-4 flex flex-col items-center text-center">
             <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-3xl overflow-hidden border-2 border-amber-500/40 shadow-2xl shadow-amber-500/10 group mb-4">
               <img
-                src="/images/dsv-crest-gold.jpg"
+                src={assetPath('/images/dsv-crest-gold.jpg')}
                 alt="Design Silicon VLSI Crest"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -20,9 +21,9 @@ export const FounderMessage: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <h3 className="text-lg font-black text-white">Bhavani Bhaskar</h3>
+              <h3 className="text-lg font-black text-white">Hari Krishna</h3>
               <p className="text-xs text-amber-400 font-mono">
-                Principal RTL Architect &amp; Founder
+                Founder &amp; Director
               </p>
               <p className="text-[11px] text-slate-400">
                 16+ Years Experience &bull; Ex-Tier-1 Semiconductor Lead
@@ -85,14 +86,14 @@ export const FounderMessage: React.FC = () => {
             <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
               <div className="w-12 h-12 rounded-xl overflow-hidden border border-amber-500/40 shrink-0">
                 <img
-                  src="/images/dsv-crest-gold.jpg"
+                  src={assetPath('/images/dsv-crest-gold.jpg')}
                   alt="DSV Seal"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-white">Founder's Vision</h3>
-                <p className="text-xs text-amber-400 font-mono">Bhavani Bhaskar &bull; Principal RTL Architect</p>
+                <p className="text-xs text-amber-400 font-mono">Hari Krishna &bull; Founder &amp; Director</p>
               </div>
             </div>
 

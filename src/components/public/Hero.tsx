@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { assetPath } from '../../utils/assetPath';
 import {
   ArrowRight,
   Sparkles,
@@ -153,7 +154,7 @@ export const Hero: React.FC<HeroProps> = ({
             {activeTab === 'board' ? (
               <div className="relative rounded-2xl border border-sky-500/30 overflow-hidden shadow-2xl bg-slate-950 group">
                 <img
-                  src="/images/dsv-hero-board.jpg"
+                  src={assetPath('/images/dsv-hero-board.jpg')}
                   alt="Design Silicon VLSI - From Code to Real Chip"
                   className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                 />

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { assetPath } from '../../utils/assetPath';
 import {
   Cpu,
   ChevronRight,
@@ -120,7 +121,7 @@ export const LearningPathVisualizer: React.FC<LearningPathProps> = ({
         {/* Featured Visual Infographic from User's uploaded asset */}
         <div className="mb-12 rounded-2xl overflow-hidden border border-sky-500/30 shadow-2xl bg-slate-950">
           <img
-            src="/images/dsv-soc-arc.jpg"
+            src={assetPath('/images/dsv-soc-arc.jpg')}
             alt="Design Silicon VLSI - Complete RTL to Real ASIC Progression"
             className="w-full h-auto object-cover"
           />

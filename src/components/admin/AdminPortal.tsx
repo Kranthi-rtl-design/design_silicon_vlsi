@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { assetPath } from '../../utils/assetPath';
 import {
   Shield,
   LayoutDashboard,
@@ -396,7 +397,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
             <div className="flex items-center gap-2.5 text-left">
               <div className="w-9 h-9 rounded-xl bg-slate-950 border border-rose-500/40 overflow-hidden shrink-0">
                 <img
-                  src="/images/dsv-badge-dark.jpg"
+                  src={assetPath('/images/dsv-badge-dark.jpg')}
                   alt="DSV Logo"
                   className="w-full h-full object-cover"
                 />

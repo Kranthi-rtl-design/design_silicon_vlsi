@@ -16,6 +16,7 @@ import {
   NotificationItem,
   AdminAccount,
 } from '../types';
+import { assetPath } from '../utils/assetPath';
 
 // STORAGE KEYS
 const STORAGE_PREFIX = 'ds_vlsi_';
@@ -47,7 +48,7 @@ const INITIAL_COURSES: Course[] = [
     slug: 'rtl-design-with-verilog-hdl',
     shortDescription: 'Learn RTL Design with real industry examples: Verilog fundamentals, combinational & sequential logic, FSM design, coding guidelines, and APB/FIFO/Arbiter implementation.',
     fullDescription: 'Comprehensive, industry-grounded program designed to transform engineers into job-ready RTL Design Engineers. Master synthesizable subsets, 3-block FSM design with registered outputs, parameterized & reusable RTL modules, and synthesis-friendly coding styles without inferred latches.',
-    thumbnail: '/images/courses/course-rtl-verilog.jpg',
+    thumbnail: assetPath('/images/courses/course-rtl-verilog.jpg'),
     previewVideoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
     category: 'RTL Design',
     level: 'Comprehensive',
@@ -83,7 +84,7 @@ const INITIAL_COURSES: Course[] = [
     slug: 'design-verification-systemverilog-uvm',
     shortDescription: 'Learn industry grade verification methodologies: Testbench development, Constrained Random Verification, Functional Coverage, Assertions (SVA), and UVM architecture.',
     fullDescription: 'A thorough verification program preparing you for Design Verification (DV) roles in top semiconductor product firms. Learn OOP principles, interfaces, virtual interfaces, randomized test generation, assertions (SVA), and construct complete UVM testbenches with UVM agents, scoreboards, sequencers, and virtual sequences.',
-    thumbnail: '/images/courses/course-verification-sv-uvm.jpg',
+    thumbnail: assetPath('/images/courses/course-verification-sv-uvm.jpg'),
     previewVideoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
     category: 'Verification',
     level: 'Advanced',
@@ -117,7 +118,7 @@ const INITIAL_COURSES: Course[] = [
     slug: 'systemverilog-complete-guide-basics-advanced',
     shortDescription: 'Master SystemVerilog for design and verification: Data types, Arrays, Structures, Enums, Procedural blocks, Interfaces, Packages, OOP, Constraints, and Mailboxes.',
     fullDescription: 'Master SystemVerilog for both RTL design and advanced testbench construction. Learn new 2-state and 4-state data types, dynamic arrays, associative arrays, queues, structs, enums, interfaces, packages, object-oriented programming (OOP), virtual interfaces, mailboxes, and semaphore synchronization.',
-    thumbnail: '/images/courses/course-systemverilog.jpg',
+    thumbnail: assetPath('/images/courses/course-systemverilog.jpg'),
     category: 'Verification',
     level: 'Intermediate',
     duration: '10 Weeks',
@@ -149,7 +150,7 @@ const INITIAL_COURSES: Course[] = [
     slug: 'lint-cdc-rdc-quality-checks-spyglass',
     shortDescription: 'Industry standard static verification flow: Coding style quality, Clock Domain Crossing checks, Reset Domain Crossing checks, waiver strategy, and SpyGlass sign-off.',
     fullDescription: 'Static timing and structural verification signoff is essential for zero-defect silicon. Learn SpyGlass linting rules, detect and eliminate multi-clock domain metastability with CDC synchronizers, verify asynchronous reset deassertion with RDC checks, write constraints, and establish waiver strategies.',
-    thumbnail: '/images/courses/course-lint-cdc-rdc.jpg',
+    thumbnail: assetPath('/images/courses/course-lint-cdc-rdc.jpg'),
     category: 'RTL Design',
     level: 'Advanced',
     duration: '8 Weeks',
@@ -181,7 +182,7 @@ const INITIAL_COURSES: Course[] = [
     slug: 'i2c-spi-user-protocol-course',
     shortDescription: 'From standard serial buses to custom user protocols: Master & Slave RTL design, SystemVerilog verification, protocol checkers, waveform analysis, and protocol FSMs.',
     fullDescription: 'Master serial protocol design and verification from the ground up. Implement I2C Master and Slave controllers with open-drain SDA/SCL lines and ACK/NACK signaling. Design high-speed 4-wire SPI controllers with configurable CPOL/CPHA modes. Architect your own custom user-defined handshake protocol with REQ/ACK signaling.',
-    thumbnail: '/images/courses/course-protocols-i2c-spi.jpg',
+    thumbnail: assetPath('/images/courses/course-protocols-i2c-spi.jpg'),
     category: 'Protocols',
     level: 'Intermediate',
     duration: '8 Weeks',
@@ -213,7 +214,7 @@ const INITIAL_COURSES: Course[] = [
     slug: 'digital-electronics-course-beginners',
     shortDescription: 'Build strong fundamentals for VLSI: Number systems, logic gates, Boolean algebra, combinational & sequential circuits, flip-flops, FSMs, and clock concepts.',
     fullDescription: 'The bedrock of hardware engineering. Start from basic transistor switches and logic gates, derive truth tables, simplify circuits using Boolean algebra and Karnaugh maps, master flip-flops and registers, calculate propagation delay and setup/hold timing margins, and design glitch-free Finite State Machines (FSM).',
-    thumbnail: '/images/courses/course-digital-electronics.jpg',
+    thumbnail: assetPath('/images/courses/course-digital-electronics.jpg'),
     category: 'RTL Design',
     level: 'Beginner',
     duration: '8 Weeks',
@@ -629,7 +630,7 @@ const INITIAL_CONTACT_MSGS: ContactMessage[] = [
     createdAt: '2026-10-12 10:15',
     status: 'New',
     unread: true,
-    internalNotes: 'Corporate lead. Schedule intro call with Founder Bhavani Bhaskar.'
+    internalNotes: 'Corporate lead. Schedule intro call with Founder Hari Krishna.'
   }
 ];
 

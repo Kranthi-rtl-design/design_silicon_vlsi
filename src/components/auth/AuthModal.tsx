@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { assetPath } from '../../utils/assetPath';
 import {
   X,
   Lock,
@@ -133,7 +134,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         <div className="bg-slate-950/90 p-5 border-b border-slate-800 flex items-center justify-between relative z-10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl overflow-hidden border border-sky-500/30 shrink-0">
-              <img src="/images/dsv-badge-dark.jpg" alt="DSV" className="w-full h-full object-cover" />
+              <img src={assetPath('/images/dsv-badge-dark.jpg')} alt="DSV" className="w-full h-full object-cover" />
             </div>
             <div>
               <h3 className="text-base font-bold text-white">Design Silicon VLSI</h3>

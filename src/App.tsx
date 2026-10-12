@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { assetPath } from './utils/assetPath';
 import {
   MessageSquare,
   Phone,
@@ -339,7 +340,7 @@ function MainApp() {
 
             <div className="rounded-2xl overflow-hidden border border-sky-500/30 shadow-2xl bg-slate-950">
               <img
-                src="/images/dsv-banner-light.png"
+                src={assetPath('/images/dsv-banner-light.png')}
                 alt="Design Silicon VLSI Banner"
                 className="w-full h-auto object-cover"
               />

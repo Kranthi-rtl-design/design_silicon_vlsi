@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { assetPath } from '../../utils/assetPath';
 import {
   Cpu,
   Menu,
@@ -82,7 +83,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900 border border-sky-500/30 overflow-hidden shadow-lg shadow-cyan-500/20 group-hover:border-cyan-400 group-hover:shadow-cyan-500/40 transition">
               <img
-                src="/images/dsv-badge-dark.jpg"
+                src={assetPath('/images/dsv-badge-dark.jpg')}
                 alt="Design Silicon VLSI (DSV)"
                 className="w-full h-full object-cover group-hover:scale-105 transition"
               />

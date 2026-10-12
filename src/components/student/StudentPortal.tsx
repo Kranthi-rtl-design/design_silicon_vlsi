@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { assetPath } from '../../utils/assetPath';
 import {
   GraduationCap,
   BookOpen,
@@ -138,7 +139,7 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
             <div className="flex items-center gap-2.5 text-left">
               <div className="w-9 h-9 rounded-xl bg-slate-950 border border-sky-500/40 overflow-hidden shrink-0">
                 <img
-                  src="/images/dsv-badge-dark.jpg"
+                  src={assetPath('/images/dsv-badge-dark.jpg')}
                   alt="DSV Logo"
                   className="w-full h-full object-cover"
                 />

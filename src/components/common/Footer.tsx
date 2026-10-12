@@ -1,4 +1,5 @@
 import React from 'react';
+import { assetPath } from '../../utils/assetPath';
 import {
   Cpu,
   Mail,
@@ -31,7 +32,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenApply, onOpenC
             <div className="flex items-center gap-4 text-center md:text-left">
               <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-amber-500/40 shadow-lg shadow-amber-500/10 shrink-0 hidden sm:block">
                 <img
-                  src="/images/dsv-crest-gold.jpg"
+                  src={assetPath('/images/dsv-crest-gold.jpg')}
                   alt="DSV Golden Seal"
                   className="w-full h-full object-cover"
                 />
@@ -76,7 +77,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenApply, onOpenC
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl overflow-hidden border border-sky-500/30 shrink-0">
                 <img
-                  src="/images/dsv-badge-dark.jpg"
+                  src={assetPath('/images/dsv-badge-dark.jpg')}
                   alt="Design Silicon VLSI"
                   className="w-full h-full object-cover"
                 />
