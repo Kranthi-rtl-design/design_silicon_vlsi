@@ -45,6 +45,7 @@ import { AdminPortal } from './components/admin/AdminPortal';
 
 function MainApp() {
   const { role, user } = useAuth();
+  const siteContent = storageService.getSiteContent();
 
   // Navigation View State
   const [currentView, setCurrentView] = useState<
@@ -264,13 +265,13 @@ function MainApp() {
           <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-fade-in">
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <span className="text-xs font-mono text-cyan-400 bg-sky-950 px-3 py-1 rounded-full border border-sky-800">
-                OFFICIAL INDUSTRY CURRICULUM
+                {siteContent.courseCatalog.eyebrow}
               </span>
               <h1 className="text-3xl sm:text-4xl font-extrabold text-white">
-                VLSI Design &amp; Verification Programs
+                {siteContent.courseCatalog.title}
               </h1>
               <p className="text-xs sm:text-sm text-slate-300">
-                Explore our full catalog of hands-on semiconductor training tracks with real EDA tool access.
+                {siteContent.courseCatalog.description}
               </p>
             </div>
 
@@ -326,15 +327,13 @@ function MainApp() {
           <div className="py-12 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 animate-fade-in">
             <div className="text-center space-y-3">
               <span className="text-xs font-mono text-cyan-400 bg-sky-950 px-3 py-1 rounded-full border border-sky-800">
-                OUR MISSION &amp; HERITAGE
+                {siteContent.about.eyebrow}
               </span>
               <h1 className="text-3xl sm:text-4xl font-black text-white">
-                About Design Silicon VLSI Institute
+                {siteContent.about.title}
               </h1>
               <p className="text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                Founded by senior silicon architects, Design Silicon VLSI operates with one unwavering
-                mandate: to transform passionate engineers into silicon-ready RTL and verification
-                professionals without shortcuts or fake claims.
+                {siteContent.about.description}
               </p>
             </div>
 

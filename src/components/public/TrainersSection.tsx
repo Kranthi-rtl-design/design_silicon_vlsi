@@ -1,5 +1,6 @@
 import React from 'react';
 import { Award, UserCheck, Cpu, ShieldCheck } from 'lucide-react';
+import { storageService } from '../../services/storage';
 
 interface TrainersSectionProps {
   onSelectCourse: (courseId: string) => void;
@@ -7,42 +8,19 @@ interface TrainersSectionProps {
 }
 
 export const TrainersSection: React.FC<TrainersSectionProps> = ({ onSelectCourse, onOpenApply }) => {
+  const content = storageService.getSiteContent().trainers;
   const trainers = [
     {
-      name: 'Bhavani Bhaskar',
-      initials: 'BB',
-      role: 'Principal RTL Architect & Founder',
-      experience: '16+ Years in Semiconductor Silicon',
-      bio: 'Pioneered complex SoC interconnects, RISC-V cores, and multi-clock FIFO microarchitectures. Veteran in RTL linting, SpyGlass CDC, and microarchitecture modeling.',
-      expertise: ['Synthesizable RTL', 'Async FIFOs', 'SpyGlass CDC', 'RISC-V Microarchitecture', 'Static Timing (STA)'],
+      name: 'Design Silicon VLSI Training Team & Mentors',
+      initials: 'DSV',
+      role: 'Industry Expert Mentors',
+      experience: 'Hands-on experience across semiconductor and EDA companies',
+      bio: 'Learn with industry experts who have worked with leading companies including Synopsys, Qualcomm, Intel, AMD, and other semiconductor organizations.',
+      expertise: ['RTL Design', 'Design Verification', 'SystemVerilog & UVM', 'Physical Design', 'Static Timing Analysis'],
       gradient: 'from-sky-500 via-cyan-400 to-blue-600',
       badgeColor: 'text-cyan-300 border-cyan-500/40 bg-cyan-950/60',
-      courseLead: 'Advanced RTL Design & Microarchitecture',
-      courseId: 'course-1',
-    },
-    {
-      name: 'Komali',
-      initials: 'K',
-      role: 'Senior Design Verification (DV) Specialist',
-      experience: '12+ Years in DV & Functional Verification',
-      bio: 'Specialist in Constrained-Random Verification, SystemVerilog OOP, UVM 1.2 Testbench Architecture, and Assertion-Based Verification (SVA) for high-speed networking and memory controllers.',
-      expertise: ['SystemVerilog OOP', 'UVM 1.2 Architecture', 'SVA Assertions', 'Functional Coverage', 'RAL Models'],
-      gradient: 'from-amber-400 via-orange-400 to-rose-500',
-      badgeColor: 'text-amber-300 border-amber-500/40 bg-amber-950/60',
-      courseLead: 'SystemVerilog & UVM Verification Mastery',
-      courseId: 'course-2',
-    },
-    {
-      name: 'Afroz Khan',
-      initials: 'AK',
-      role: 'Physical Design & STA Signoff Lead',
-      experience: '14+ Years in Backend & Protocol Architecture',
-      bio: 'Hands-on lead in AMBA protocols (AXI4/APB/AHB), ASIC Floorplanning, Clock Tree Synthesis (CTS), and tapeout signoff down to TSMC 7nm / 5nm nodes.',
-      expertise: ['AMBA AXI4 Protocols', 'Floorplanning & PDN', 'Clock Tree Synthesis (CTS)', 'Primetime STA Signoff', 'GDSII Signoff'],
-      gradient: 'from-emerald-400 via-teal-400 to-cyan-500',
-      badgeColor: 'text-emerald-300 border-emerald-500/40 bg-emerald-950/60',
-      courseLead: 'SoC Interconnects & Protocols / Physical Design',
-      courseId: 'course-3',
+      courseLead: 'Explore DSV training programs',
+      courseId: '',
     },
   ];
 
@@ -52,18 +30,17 @@ export const TrainersSection: React.FC<TrainersSectionProps> = ({ onSelectCourse
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800 text-cyan-300 text-xs font-mono">
             <Award className="w-3.5 h-3.5" />
-            <span>EXPERT FACULTY &amp; MENTORS</span>
+            <span>{content.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Learn Directly from Practicing Chip Architects
+            {content.title}
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            No teaching assistants or theorists. Every session is led by senior architects who have
-            taped out live silicon for tier-1 semiconductor companies.
+            {content.description}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
           {trainers.map((t) => (
             <div
               key={t.name}

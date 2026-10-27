@@ -12,6 +12,7 @@ import {
   Play
 } from 'lucide-react';
 import { WaveformVisual } from '../common/WaveformVisual';
+import { storageService } from '../../services/storage';
 
 interface HeroProps {
   onExploreCourses: () => void;
@@ -27,6 +28,7 @@ export const Hero: React.FC<HeroProps> = ({
   onOpenPreview,
 }) => {
   const [activeTab, setActiveTab] = useState<'board' | 'waveform'>('board');
+  const content = storageService.getSiteContent().hero;
 
   return (
     <section className="relative pt-6 pb-16 lg:pt-12 lg:pb-24 overflow-hidden">
@@ -41,14 +43,13 @@ export const Hero: React.FC<HeroProps> = ({
             {/* Pill Tag */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-cyan-500/40 text-cyan-300 text-xs font-mono shadow-sm">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-              <span>FROM RTL TO REAL ASIC &bull; ADMISSIONS OPEN</span>
+              <span>{content.eyebrow}</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-white tracking-tight leading-[1.15]">
-              Design Silicon VLSI —{' '}
               <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-amber-400 bg-clip-text text-transparent">
-                From RTL to Real Silicon.
+                {content.title}
               </span>
             </h1>
 
@@ -70,9 +71,7 @@ export const Hero: React.FC<HeroProps> = ({
 
             {/* Supporting Copy */}
             <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Design Silicon VLSI provides deep, industry-grounded training in synthesizable RTL
-              microarchitecture, SystemVerilog &amp; UVM verification, AMBA bus interconnects, and Static
-              Timing Analysis (STA). Learn how real chips are specified, coded, simulated, and taped out.
+              {content.description}
             </p>
 
             {/* Action Buttons */}

@@ -39,7 +39,8 @@ import {
   Lock,
   Ban,
   UserX,
-  UserCheck
+  UserCheck,
+  ImagePlus
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
@@ -58,8 +59,41 @@ import {
   AdminAccount,
   CourseMode,
   CourseLevel,
-  CourseCategory
+  CourseCategory,
+  SiteContent
 } from '../../types';
+
+const MAX_IMAGE_FILE_SIZE = 8 * 1024 * 1024;
+const MAX_IMAGE_EDGE = 1440;
+
+const compressImageUpload = async (file: File): Promise<string> => {
+  if (!file.type.startsWith('image/') || file.size > MAX_IMAGE_FILE_SIZE) {
+    throw new Error('Choose an image under 8 MB.');
+  }
+
+  const bitmap = await createImageBitmap(file);
+  try {
+    const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Image processing is unavailable.');
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/webp', 0.78));
+    if (!blob) throw new Error('Image processing failed.');
+
+    return await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => typeof reader.result === 'string' ? resolve(reader.result) : reject(new Error('Image processing failed.'));
+      reader.onerror = () => reject(new Error('Image processing failed.'));
+      reader.readAsDataURL(blob);
+    });
+  } finally {
+    bitmap.close();
+  }
+};
 
 export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHome }) => {
   const { user, logout } = useAuth();
@@ -71,6 +105,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
     | 'chat-leads'
     | 'contact-messages'
     | 'students'
+    | 'website-content'
     | 'courses'
     | 'events'
     | 'schedules'
@@ -94,6 +129,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
   const [paymentRecords, setPaymentRecords] = useState(storageService.getPaymentRecords());
   const [announcements, setAnnouncements] = useState(storageService.getAnnouncements());
   const [adminAccounts, setAdminAccounts] = useState<AdminAccount[]>(storageService.getAdminAccounts());
+  const [siteContent, setSiteContent] = useState<SiteContent>(storageService.getSiteContent());
   const [badges, setBadges] = useState(storageService.getUnreadBadges());
 
   // Search & Filter States
@@ -144,12 +180,18 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
       setPaymentRecords(storageService.getPaymentRecords());
       setAnnouncements(storageService.getAnnouncements());
       setAdminAccounts(storageService.getAdminAccounts());
+      setSiteContent(storageService.getSiteContent());
       setBadges(storageService.getUnreadBadges());
     });
     return unsub;
   }, []);
 
   const isSuperAdmin = !!(user?.isSuperAdmin || user?.email?.toLowerCase() === 'admin_design_silicon@dsv.com');
+
+  const handleSaveSiteContent = () => {
+    storageService.saveSiteContent(siteContent);
+    showToast('Website and student portal content saved.', 'success');
+  };
 
   const handleAddAdmin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -242,6 +284,26 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
     }
   };
 
+  const handleCourseImageUpload = async (file?: File) => {
+    if (!file) return;
+    try {
+      const thumbnail = await compressImageUpload(file);
+      setEditingCourse((current) => current ? { ...current, thumbnail } : current);
+    } catch {
+      showToast('Choose a supported image under 8 MB.', 'error');
+    }
+  };
+
+  const handleEventImageUpload = async (file?: File) => {
+    if (!file) return;
+    try {
+      const coverImage = await compressImageUpload(file);
+      setEditingEvent((current) => current ? { ...current, coverImage } : current);
+    } catch {
+      showToast('Choose a supported image under 8 MB.', 'error');
+    }
+  };
+
   const handleSaveCourse = (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingCourse?.title) return;
@@ -258,7 +320,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
       duration: editingCourse.duration || '16 Weeks',
       mode: (editingCourse.mode as CourseMode) || 'Hybrid',
       fee: Number(editingCourse.fee) || 45000,
-      trainer: editingCourse.trainer || 'Bhavani Bhaskar',
+      trainer: editingCourse.trainer || 'DSV Training Team',
       batch: editingCourse.batch || 'Batch #29 (Upcoming)',
       startDate: editingCourse.startDate || '2026-11-15',
       applyEnabled: editingCourse.applyEnabled ?? true,
@@ -289,8 +351,8 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
       slug: (editingEvent.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       description: editingEvent.description || '',
       coverImage: editingEvent.coverImage || 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
-      speaker: editingEvent.speaker || 'Bhavani Bhaskar',
-      speakerRole: editingEvent.speakerRole || 'Principal RTL Architect',
+      speaker: editingEvent.speaker || 'DSV Training Team',
+      speakerRole: editingEvent.speakerRole || 'Industry Expert Mentors',
       date: editingEvent.date || '2026-11-20',
       time: editingEvent.time || '10:00 AM - 1:00 PM IST',
       mode: (editingEvent.mode as CourseMode) || 'Online',
@@ -320,7 +382,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
       courseTitle: editingSchedule.courseTitle || 'Advanced RTL Design',
       batch: editingSchedule.batch || 'Batch #28 (Weekend)',
       topic: editingSchedule.topic,
-      trainer: editingSchedule.trainer || 'Bhavani Bhaskar',
+      trainer: editingSchedule.trainer || 'DSV Training Team',
       date: editingSchedule.date || '2026-10-24',
       startTime: editingSchedule.startTime || '10:00 AM',
       endTime: editingSchedule.endTime || '01:00 PM',
@@ -445,6 +507,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
             { id: 'chat-leads', label: 'Chat / Leads', icon: MessageSquare, badge: badges.newChatLeads },
             { id: 'contact-messages', label: 'Contact Messages', icon: Mail, badge: badges.newContactMsgs },
             { id: 'students', label: 'Students Roster', icon: Users },
+            { id: 'website-content', label: 'Website Content', icon: Sparkles },
             { id: 'courses', label: 'Courses & LMS CMS', icon: BookOpen },
             { id: 'events', label: 'Events & Workshops', icon: Calendar },
             { id: 'schedules', label: 'Class Schedules', icon: Clock },
@@ -1078,6 +1141,69 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
             </div>
           )}
 
+          {activeSection === 'website-content' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div>
+                  <h2 className="text-2xl font-bold text-white">Website &amp; Portal Content</h2>
+                  <p className="text-xs text-slate-400 mt-1">Edit headings and introductory copy for public pages and student portal sections.</p>
+                </div>
+                <button
+                  onClick={handleSaveSiteContent}
+                  className="px-4 py-2 rounded-lg bg-cyan-500 text-slate-950 text-xs font-bold hover:bg-cyan-400 transition"
+                >
+                  <Save className="w-4 h-4 inline mr-1.5" />Save All Content
+                </button>
+              </div>
+
+              <div className="divide-y divide-slate-800 border-y border-slate-800">
+                {Object.entries(siteContent).map(([key, section]) => (
+                  <details key={key} open={key === 'trainers' || key === 'testimonials'} className="py-4">
+                    <summary className="cursor-pointer text-sm font-semibold text-cyan-300">
+                      {key.replace(/([A-Z])/g, ' $1').replace(/^./, (letter) => letter.toUpperCase())}
+                    </summary>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4">
+                      <label className="text-xs font-semibold text-slate-300">
+                        Eyebrow / Label
+                        <input
+                          value={section.eyebrow}
+                          onChange={(event) => setSiteContent((current) => ({
+                            ...current,
+                            [key]: { ...current[key], eyebrow: event.target.value }
+                          }))}
+                          className="mt-1 w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-normal"
+                        />
+                      </label>
+                      <label className="text-xs font-semibold text-slate-300">
+                        Heading / Title
+                        <input
+                          value={section.title}
+                          onChange={(event) => setSiteContent((current) => ({
+                            ...current,
+                            [key]: { ...current[key], title: event.target.value }
+                          }))}
+                          className="mt-1 w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-normal"
+                        />
+                      </label>
+                      <label className="text-xs font-semibold text-slate-300 md:col-span-2">
+                        Introductory Copy
+                        <textarea
+                          rows={3}
+                          value={section.description}
+                          onChange={(event) => setSiteContent((current) => ({
+                            ...current,
+                            [key]: { ...current[key], description: event.target.value }
+                          }))}
+                          className="mt-1 w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-normal"
+                        />
+                      </label>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* ================= 6. COURSES & LMS CMS (Phase 5) ================= */}
           {activeSection === 'courses' && (
             <div className="space-y-6 animate-fade-in">
@@ -1099,7 +1225,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                       level: 'Comprehensive',
                       duration: '16 Weeks',
                       mode: 'Hybrid',
-                      trainer: 'Bhavani Bhaskar',
+                      trainer: 'DSV Training Team',
                       batch: 'Next Cohort',
                       published: true,
                       featuredOnHome: true,
@@ -1121,6 +1247,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                     className="rounded-2xl bg-slate-900 border border-slate-800 p-5 flex flex-col justify-between space-y-4"
                   >
                     <div>
+                      <img src={course.thumbnail} alt={`${course.title} course`} className="w-full aspect-[16/7] object-cover rounded-lg border border-slate-800 mb-3" />
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-cyan-300 border border-sky-800">
                           {course.category} &bull; {course.mode}
@@ -1221,6 +1348,26 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                         />
                       </div>
 
+                      <div>
+                        <label className="block text-slate-300 mb-1 font-semibold">Course Image</label>
+                        {editingCourse.thumbnail && (
+                          <img src={editingCourse.thumbnail} alt="Course preview" className="w-full max-h-48 object-cover rounded-lg border border-slate-700 mb-2" />
+                        )}
+                        <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800 text-cyan-300 font-semibold cursor-pointer hover:bg-slate-700">
+                          <ImagePlus className="w-4 h-4" />
+                          <span>Choose Image</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="sr-only"
+                            onChange={(event) => {
+                              void handleCourseImageUpload(event.target.files?.[0]);
+                              event.target.value = '';
+                            }}
+                          />
+                        </label>
+                      </div>
+
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <label className="block text-slate-300 mb-1 font-semibold">Category</label>
@@ -1251,7 +1398,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                           <label className="block text-slate-300 mb-1 font-semibold">Trainer</label>
                           <input
                             type="text"
-                            value={editingCourse.trainer || 'Bhavani Bhaskar'}
+                            value={editingCourse.trainer || 'DSV Training Team'}
                             onChange={(e) => setEditingCourse({ ...editingCourse, trainer: e.target.value })}
                             className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none"
                           />
@@ -1357,7 +1504,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                         description: '',
                         date: '2026-11-20',
                         time: '10:00 AM - 1:00 PM IST',
-                        speaker: 'Bhavani Bhaskar',
+                        speaker: 'DSV Training Team',
                         mode: 'Online',
                         locationOrUrl: 'Google Meet',
                         published: true,
@@ -1380,6 +1527,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                     className="rounded-2xl bg-slate-900 border border-slate-800 p-5 flex flex-col justify-between space-y-4"
                   >
                     <div>
+                      <img src={ev.coverImage} alt={`${ev.title} event`} className="w-full aspect-[16/7] object-cover rounded-lg border border-slate-800 mb-3" />
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
                           {ev.registeredCount} Registered
@@ -1417,7 +1565,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
               {/* Event Editor Modal */}
               {eventModalOpen && editingEvent && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in font-sans">
-                  <div className="relative w-full max-w-lg bg-slate-900 border border-cyan-500/30 rounded-2xl p-6 shadow-2xl">
+                  <div className="relative w-full max-w-lg bg-slate-900 border border-cyan-500/30 rounded-2xl p-6 shadow-2xl max-h-[88vh] overflow-y-auto">
                     <button
                       onClick={() => setEventModalOpen(false)}
                       className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
@@ -1449,6 +1597,26 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                         />
                       </div>
 
+                      <div>
+                        <label className="block text-slate-300 mb-1 font-semibold">Event Image</label>
+                        {editingEvent.coverImage && (
+                          <img src={editingEvent.coverImage} alt="Event preview" className="w-full max-h-48 object-cover rounded-lg border border-slate-700 mb-2" />
+                        )}
+                        <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800 text-cyan-300 font-semibold cursor-pointer hover:bg-slate-700">
+                          <ImagePlus className="w-4 h-4" />
+                          <span>Choose Image</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="sr-only"
+                            onChange={(event) => {
+                              void handleEventImageUpload(event.target.files?.[0]);
+                              event.target.value = '';
+                            }}
+                          />
+                        </label>
+                      </div>
+
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <label className="block text-slate-300 mb-1 font-semibold">Date</label>
@@ -1463,7 +1631,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                           <label className="block text-slate-300 mb-1 font-semibold">Speaker</label>
                           <input
                             type="text"
-                            value={editingEvent.speaker || 'Bhavani Bhaskar'}
+                            value={editingEvent.speaker || 'DSV Training Team'}
                             onChange={(e) => setEditingEvent({ ...editingEvent, speaker: e.target.value })}
                             className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none"
                           />
@@ -1519,7 +1687,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                   onClick={() => {
                     setEditingSchedule({
                       topic: '',
-                      trainer: 'Bhavani Bhaskar',
+                      trainer: 'DSV Training Team',
                       date: '2026-10-24',
                       startTime: '10:00 AM',
                       endTime: '01:00 PM',
@@ -1615,7 +1783,7 @@ export const AdminPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackToHo
                           <label className="block text-slate-300 mb-1 font-semibold">Trainer</label>
                           <input
                             type="text"
-                            value={editingSchedule.trainer || 'Bhavani Bhaskar'}
+                            value={editingSchedule.trainer || 'DSV Training Team'}
                             onChange={(e) => setEditingSchedule({ ...editingSchedule, trainer: e.target.value })}
                             className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none"
                           />

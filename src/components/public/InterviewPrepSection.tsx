@@ -9,6 +9,7 @@ import {
   Code2,
   CheckCircle2
 } from 'lucide-react';
+import { storageService } from '../../services/storage';
 
 interface InterviewPrepProps {
   onOpenApply: () => void;
@@ -16,6 +17,7 @@ interface InterviewPrepProps {
 
 export const InterviewPrepSection: React.FC<InterviewPrepProps> = ({ onOpenApply }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const content = storageService.getSiteContent().interviewPrep;
 
   const questions = [
     {
@@ -66,14 +68,13 @@ This decouples backpressure and guarantees that neither master nor slave enters 
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800 text-cyan-300 text-xs font-mono">
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>CRACKING TOP SEMICONDUCTOR INTERVIEWS</span>
+            <span>{content.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Real RTL &amp; STA Technical Interview Challenges
+            {content.title}
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Tier-1 semiconductor companies grill candidates on underlying circuit physics and
-            microarchitectural trade-offs. Here is a preview of the conceptual problems we train you to master.
+            {content.description}
           </p>
         </div>
 

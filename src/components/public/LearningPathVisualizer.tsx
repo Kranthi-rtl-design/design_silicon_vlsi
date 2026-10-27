@@ -12,6 +12,7 @@ import {
   Box,
   Compass
 } from 'lucide-react';
+import { storageService } from '../../services/storage';
 
 interface LearningPathProps {
   onSelectCourse: (courseId: string) => void;
@@ -23,6 +24,7 @@ export const LearningPathVisualizer: React.FC<LearningPathProps> = ({
   onOpenApply,
 }) => {
   const [activeStep, setActiveStep] = useState(0);
+  const content = storageService.getSiteContent().learningPath;
 
   const steps = [
     {
@@ -107,12 +109,13 @@ export const LearningPathVisualizer: React.FC<LearningPathProps> = ({
         <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800 text-cyan-300 text-xs font-mono">
             <Compass className="w-3.5 h-3.5" />
-            <span>STRUCTURED SILICON LEARNING PATH</span>
+            <span>{content.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            From Digital Logic to Tapeout Signoff
+            {content.title}
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+            {content.description}
             Follow our proven 9-stage engineering roadmap. Each phase builds upon the previous,
             ensuring you think in hardware rather than abstract software code.
           </p>

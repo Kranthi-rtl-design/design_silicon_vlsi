@@ -13,10 +13,15 @@ import {
   Enrollment,
   Assignment,
   Announcement,
+  SiteContent,
   NotificationItem,
   AdminAccount,
 } from '../types';
 import { assetPath } from '../utils/assetPath';
+
+const DEFAULT_TRAINER_LABEL = 'DSV Training Team';
+const normalizeTrainerLabel = (name: string): string =>
+  /Bhavani Bhaskar|Komali|Afroz Khan/i.test(name) ? DEFAULT_TRAINER_LABEL : name;
 
 // STORAGE KEYS
 const STORAGE_PREFIX = 'ds_vlsi_';
@@ -38,6 +43,33 @@ const KEYS = {
   NOTIFICATIONS: `${STORAGE_PREFIX}notifications`,
   ADMINS: `${STORAGE_PREFIX}admins`,
   INITIALIZED: `${STORAGE_PREFIX}initialized_v4`,
+  SITE_CONTENT: `${STORAGE_PREFIX}site_content_v1`,
+};
+
+export const INITIAL_SITE_CONTENT: SiteContent = {
+  hero: { eyebrow: 'FROM RTL TO REAL ASIC • ADMISSIONS OPEN', title: 'Design Silicon VLSI — From RTL to Real Silicon.', description: 'Design Silicon VLSI provides deep, industry-grounded training in synthesizable RTL microarchitecture, SystemVerilog & UVM verification, AMBA bus interconnects, and Static Timing Analysis (STA). Learn how real chips are specified, coded, simulated, and taped out.' },
+  search: { eyebrow: 'Popular:', title: 'What do you want to learn? (E.g. RTL, Verilog, AXI4, CDC, UVM, STA...)', description: 'Search Curriculum' },
+  whyChooseUs: { eyebrow: 'THE DESIGN SILICON PHILOSOPHY', title: 'Why Design Silicon VLSI?', description: "We don't teach rote textbook syntax or use unverified placement claims. We train engineers the way Tier-1 semiconductor design centers demand." },
+  learningPath: { eyebrow: 'STRUCTURED SILICON LEARNING PATH', title: 'From Digital Logic to Tapeout Signoff', description: 'Follow a structured path from digital design fundamentals to implementation, signoff, and interview readiness.' },
+  courses: { eyebrow: 'SPECIALIZED SILICON DOMAINS', title: 'Featured VLSI Programs', description: 'Curated, industry-aligned programs instructed by practicing principal architects.' },
+  events: { eyebrow: 'LIVE WORKSHOPS & TECH WEBINARS', title: 'Upcoming VLSI Events', description: 'Attend live interactive masterclasses on Clock Domain Crossing (CDC), AXI4 protocol packet traces, and technical interview problem solving.' },
+  founder: { eyebrow: 'A NOTE FROM THE FOUNDER', title: "We Don't Teach Synthesizable Verilog from Textbooks. We Teach It from Silicon Failures.", description: 'In the semiconductor industry, a single race condition or missed CDC synchronizer can brick a multimillion-dollar mask tapeout. Yet, most college graduates are taught Verilog as if it were a sequential scripting language like C or Python.' },
+  trainers: { eyebrow: 'EXPERT FACULTY & MENTORS', title: 'Learn with the DSV Training Team & Mentors', description: 'Learn from industry experts with practical experience across leading semiconductor and EDA companies, including Synopsys, Qualcomm, Intel, and AMD.' },
+  eLearning: { eyebrow: 'STUDENT LEARNING MANAGEMENT SYSTEM (LMS)', title: 'Inside the Design Silicon E-Learning Portal', description: 'Enrolled students get high-definition lectures, interactive synthesizable Verilog code viewers, downloadable specification sheets, and automated assignment progress tracking.' },
+  interviewPrep: { eyebrow: 'CRACKING TOP SEMICONDUCTOR INTERVIEWS', title: 'Real RTL & STA Technical Interview Challenges', description: 'Tier-1 semiconductor companies grill candidates on underlying circuit physics and microarchitectural trade-offs. Here is a preview of the conceptual problems we train you to master.' },
+  testimonials: { eyebrow: 'GENUINE STUDENT OUTCOMES', title: 'Alumni Feedback & Silicon Outcomes', description: 'Real feedback from engineers who transitioned into core semiconductor product roles. We honor our pledge never to advertise unverified claims.' },
+  faq: { eyebrow: 'COMMONLY ASKED QUESTIONS', title: 'Frequently Asked Questions', description: 'Everything you need to know about admissions, lab access, and our semiconductor programs.' },
+  contact: { eyebrow: 'VISIT US OR GET IN TOUCH', title: 'Connect with Design Silicon VLSI', description: 'Whether you want to inspect our physical hardware labs in Bengaluru, discuss corporate training for your engineering team, or ask about batch schedules, we are here to help.' },
+  courseCatalog: { eyebrow: 'OFFICIAL INDUSTRY CURRICULUM', title: 'VLSI Design & Verification Programs', description: 'Explore our full catalog of hands-on semiconductor training tracks with real EDA tool access.' },
+  about: { eyebrow: 'OUR MISSION & HERITAGE', title: 'About Design Silicon VLSI Institute', description: 'Founded by senior silicon architects, Design Silicon VLSI operates with one unwavering mandate: to transform passionate engineers into silicon-ready RTL and verification professionals without shortcuts or fake claims.' },
+  studentDashboard: { eyebrow: 'STUDENT LEARNING WORKSPACE', title: 'Welcome Back, {name}!', description: 'Pick up where you left off and keep moving through your learning plan.' },
+  studentCourses: { eyebrow: 'MY LEARNING', title: 'Enrolled Specializations', description: 'Review your enrolled programs and course progress.' },
+  studentLearning: { eyebrow: 'E-LEARNING', title: 'Your Classroom', description: 'Continue lessons, review course materials, and track your learning.' },
+  studentAssignments: { eyebrow: 'PRACTICE & PROJECTS', title: 'Course Assignments & Projects', description: 'Review your assignments and submitted work.' },
+  studentSchedule: { eyebrow: 'LIVE CLASSES', title: 'Live Batch Timetable', description: 'Check upcoming sessions and class links.' },
+  studentPayments: { eyebrow: 'ACCOUNT', title: 'Tuition & Fee Receipts', description: 'Transparent accounting of total fee, payments made, and next due date.' },
+  studentNotifications: { eyebrow: 'UPDATES', title: 'Institute Notices & Alerts', description: 'Stay current with institute updates and account notifications.' },
+  studentProfile: { eyebrow: 'ACCOUNT', title: 'Student Profile', description: 'View your student account and enrollment details.' },
 };
 
 // INITIAL SEED DATA
@@ -55,7 +87,7 @@ const INITIAL_COURSES: Course[] = [
     duration: '16 Weeks (Weekend / Weekday)',
     mode: 'Hybrid',
     fee: 45000,
-    trainer: 'Bhavani Bhaskar',
+    trainer: 'DSV Training Team',
     batch: 'Batch #28 (Starting Next Monday)',
     startDate: '2026-11-02',
     applyEnabled: true,
@@ -91,7 +123,7 @@ const INITIAL_COURSES: Course[] = [
     duration: '14 Weeks',
     mode: 'Online',
     fee: 48000,
-    trainer: 'Komali',
+    trainer: 'DSV Training Team',
     batch: 'Batch #19 (Admissions Open)',
     startDate: '2026-11-10',
     applyEnabled: true,
@@ -124,7 +156,7 @@ const INITIAL_COURSES: Course[] = [
     duration: '10 Weeks',
     mode: 'Online',
     fee: 38000,
-    trainer: 'Komali',
+    trainer: 'DSV Training Team',
     batch: 'Batch #20 (Evening Special)',
     startDate: '2026-11-12',
     applyEnabled: true,
@@ -156,7 +188,7 @@ const INITIAL_COURSES: Course[] = [
     duration: '8 Weeks',
     mode: 'Hybrid',
     fee: 35000,
-    trainer: 'Bhavani Bhaskar',
+    trainer: 'DSV Training Team',
     batch: 'Batch #15 (Weekend Intensive)',
     startDate: '2026-11-18',
     applyEnabled: true,
@@ -188,7 +220,7 @@ const INITIAL_COURSES: Course[] = [
     duration: '8 Weeks',
     mode: 'Online',
     fee: 28000,
-    trainer: 'Afroz Khan',
+    trainer: 'DSV Training Team',
     batch: 'Batch #12 (Weekend Special)',
     startDate: '2026-11-22',
     applyEnabled: true,
@@ -220,7 +252,7 @@ const INITIAL_COURSES: Course[] = [
     duration: '8 Weeks',
     mode: 'Hybrid',
     fee: 22000,
-    trainer: 'Bhavani Bhaskar',
+    trainer: 'DSV Training Team',
     batch: 'Foundation Batch #06',
     startDate: '2026-11-25',
     applyEnabled: true,
@@ -419,7 +451,7 @@ const INITIAL_EVENTS: EventItem[] = [
     slug: 'cdc-structural-analysis-masterclass',
     description: 'Learn how to detect and eliminate multi-clock domain metastability bugs using 2-FF synchronizers and SpyGlass CDC methodology.',
     coverImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
-    speaker: 'Bhavani Bhaskar',
+    speaker: 'DSV Training Team',
     speakerRole: 'Principal RTL Architect & Founder',
     date: '2026-10-25',
     time: '10:00 AM - 1:00 PM IST',
@@ -440,7 +472,7 @@ const INITIAL_EVENTS: EventItem[] = [
     slug: 'cracking-rtl-dv-interviews-webinar',
     description: 'Insider blueprint on how tier-1 semiconductor companies evaluate RTL coding, FSM architecture, SystemVerilog OOP, and setup/hold timing problems.',
     coverImage: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
-    speaker: 'Komali & Afroz Khan',
+    speaker: 'DSV Training Team',
     speakerRole: 'Senior Verification Specialist & STA Lead',
     date: '2026-11-05',
     time: '6:30 PM - 8:30 PM IST',
@@ -458,21 +490,21 @@ const INITIAL_EVENTS: EventItem[] = [
     id: 'event-3',
     title: 'Offline Workshop: AXI4 Protocol Packet Decoding & Waveform Debug',
     slug: 'offline-axi4-protocol-workshop',
-    description: 'An intensive 1-day offline boot-camp in Hyderabad. Bring your laptops, simulate AXI4 read/write channels, and debug outstanding transactions.',
+    description: 'An intensive 1-day offline boot-camp in Bengaluru. Bring your laptops, simulate AXI4 read/write channels, and debug outstanding transactions.',
     coverImage: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
-    speaker: 'Afroz Khan',
+    speaker: 'DSV Training Team',
     speakerRole: 'SoC Interconnect Expert',
     date: '2026-11-14',
     time: '9:30 AM - 5:00 PM IST',
     mode: 'Offline',
-    locationOrUrl: 'Design Silicon VLSI Center, HITEC City, Hyderabad',
+    locationOrUrl: 'Design Silicon VLSI, Marathahalli, Bengaluru',
     registrationDeadline: '2026-11-12',
     applyEnabled: true,
     popupEnabled: false,
     published: true,
     maxAttendees: 50,
     registeredCount: 38,
-    tags: ['Offline Lab', 'AXI4', 'Hyderabad', 'Hands-on']
+    tags: ['Offline Lab', 'AXI4', 'Bengaluru', 'Hands-on']
   }
 ];
 
@@ -519,7 +551,7 @@ const INITIAL_APPLICATIONS: ApplicationRequest[] = [
     message: 'Looking for in-depth RTL microarchitecture training to break into VLSI design.',
     createdAt: '2026-10-12 11:30',
     status: 'Approved',
-    assignedStaff: 'Bhavani Bhaskar',
+    assignedStaff: 'DSV Training Team',
     internalNotes: 'Candidate has strong basics in Boolean algebra. Approved for enrollment.'
   },
   {
@@ -642,7 +674,7 @@ const INITIAL_SCHEDULES: ClassSchedule[] = [
     courseTitle: 'Advanced RTL Design & Microarchitecture with Verilog',
     batch: 'Batch #28 (Weekend)',
     topic: 'Dual-Clock Asynchronous FIFO Design & Gray Code Math',
-    trainer: 'Bhavani Bhaskar',
+    trainer: 'DSV Training Team',
     date: '2026-10-17',
     startTime: '10:00 AM',
     endTime: '01:00 PM',
@@ -656,7 +688,7 @@ const INITIAL_SCHEDULES: ClassSchedule[] = [
     courseTitle: 'Advanced RTL Design & Microarchitecture with Verilog',
     batch: 'Batch #28 (Weekend)',
     topic: 'Live Lab: Resolving CDC Violations with SpyGlass',
-    trainer: 'Bhavani Bhaskar',
+    trainer: 'DSV Training Team',
     date: '2026-10-18',
     startTime: '10:00 AM',
     endTime: '01:00 PM',
@@ -669,7 +701,7 @@ const INITIAL_SCHEDULES: ClassSchedule[] = [
     courseTitle: 'SystemVerilog & UVM Verification Mastery',
     batch: 'Batch #19',
     topic: 'Building UVM Scoreboards & TLM Analysis Ports',
-    trainer: 'Komali',
+    trainer: 'DSV Training Team',
     date: '2026-10-17',
     startTime: '02:30 PM',
     endTime: '05:30 PM',
@@ -828,7 +860,7 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     userId: 'user-student-1',
     recipientRole: 'student',
     title: 'Assignment #1 Graded',
-    message: 'Your Synchronous FIFO RTL scored 94/100 with praise from Trainer Bhavani Bhaskar.',
+    message: 'Your Synchronous FIFO RTL scored 94/100 with praise from the DSV Training Team.',
     type: 'general',
     linkTarget: 'assignments',
     createdAt: '2026-10-11 11:00',
@@ -920,6 +952,9 @@ class StorageService {
         localStorage.setItem(KEYS.ADMINS, JSON.stringify(INITIAL_ADMINS));
       }
     }
+    if (!localStorage.getItem(KEYS.SITE_CONTENT)) {
+      localStorage.setItem(KEYS.SITE_CONTENT, JSON.stringify(INITIAL_SITE_CONTENT));
+    }
   }
 
   private getItem<T>(key: string, defaultValue: T): T {
@@ -940,9 +975,26 @@ class StorageService {
     }
   }
 
+  getSiteContent(): SiteContent {
+    const saved = this.getItem<Partial<SiteContent>>(KEYS.SITE_CONTENT, {});
+    return Object.fromEntries(
+      Object.entries(INITIAL_SITE_CONTENT).map(([key, defaults]) => [
+        key,
+        { ...defaults, ...(saved[key] ?? {}) }
+      ])
+    ) as SiteContent;
+  }
+
+  saveSiteContent(content: SiteContent): void {
+    this.setItem(KEYS.SITE_CONTENT, content);
+  }
+
   // --- COURSES ---
   getCourses(): Course[] {
-    return this.getItem<Course[]>(KEYS.COURSES, INITIAL_COURSES);
+    return this.getItem<Course[]>(KEYS.COURSES, INITIAL_COURSES).map(course => ({
+      ...course,
+      trainer: normalizeTrainerLabel(course.trainer)
+    }));
   }
 
   getCourseById(id: string): Course | undefined {
@@ -994,7 +1046,15 @@ class StorageService {
 
   // --- EVENTS ---
   getEvents(): EventItem[] {
-    return this.getItem<EventItem[]>(KEYS.EVENTS, INITIAL_EVENTS);
+    return this.getItem<EventItem[]>(KEYS.EVENTS, INITIAL_EVENTS).map(event => ({
+      ...event,
+      speaker: normalizeTrainerLabel(event.speaker),
+      description: event.description.replace(/\bHyderabad\b/g, 'Bengaluru'),
+      locationOrUrl: event.locationOrUrl.includes('HITEC City, Hyderabad')
+        ? 'Design Silicon VLSI, 305, 3rd Floor, REMD Residency, 1st Main Road, Kaveri Layout, Marathahalli, Bengaluru 560037'
+        : event.locationOrUrl,
+      tags: event.tags.map(tag => tag === 'Hyderabad' ? 'Bengaluru' : tag)
+    }));
   }
 
   getEventById(id: string): EventItem | undefined {
@@ -1054,7 +1114,10 @@ class StorageService {
 
   // --- APPLICATION REQUESTS ---
   getApplications(): ApplicationRequest[] {
-    return this.getItem<ApplicationRequest[]>(KEYS.APPLICATIONS, INITIAL_APPLICATIONS);
+    return this.getItem<ApplicationRequest[]>(KEYS.APPLICATIONS, INITIAL_APPLICATIONS).map(application => ({
+      ...application,
+      assignedStaff: application.assignedStaff ? normalizeTrainerLabel(application.assignedStaff) : undefined
+    }));
   }
 
   submitApplication(data: Omit<ApplicationRequest, 'id' | 'createdAt' | 'status'>): ApplicationRequest {
@@ -1242,7 +1305,10 @@ class StorageService {
 
   // --- SCHEDULES ---
   getSchedules(): ClassSchedule[] {
-    return this.getItem<ClassSchedule[]>(KEYS.SCHEDULES, INITIAL_SCHEDULES);
+    return this.getItem<ClassSchedule[]>(KEYS.SCHEDULES, INITIAL_SCHEDULES).map(schedule => ({
+      ...schedule,
+      trainer: normalizeTrainerLabel(schedule.trainer)
+    }));
   }
 
   saveSchedule(sch: ClassSchedule): void {

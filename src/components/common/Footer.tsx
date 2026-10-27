@@ -211,13 +211,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenApply, onOpenC
           {/* Contact Details */}
           <div>
             <h5 className="text-xs font-bold font-mono uppercase tracking-wider text-slate-200 mb-3.5">
-              Hyderabad Campus
+              Bengaluru Campus
             </h5>
             <ul className="space-y-3 text-xs">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                 <span>
-                  Design Silicon VLSI, HITEC City, Madhapur, Hyderabad, Telangana 500081
+                  Design Silicon VLSI, 305, 3rd Floor, REMD Residency, 1st Main Road, Kaveri Layout, Marathahalli, Bengaluru 560037
                 </span>
               </li>
               <li className="flex items-center gap-2.5">

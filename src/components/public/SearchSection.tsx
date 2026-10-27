@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, ArrowRight } from 'lucide-react';
+import { storageService } from '../../services/storage';
 
 interface SearchSectionProps {
   onSearch: (query: string) => void;
@@ -19,6 +20,7 @@ const POPULAR_KEYWORDS = [
 
 export const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const content = storageService.getSiteContent().search;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +44,7 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="What do you want to learn? (E.g. RTL, Verilog, AXI4, CDC, UVM, STA...)"
+              placeholder={content.title}
               className="w-full bg-slate-950 border border-slate-700 focus:border-cyan-400 rounded-xl pl-12 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none transition font-sans"
             />
           </div>
@@ -51,14 +53,14 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
             type="submit"
             className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 via-cyan-500 to-sky-400 text-slate-950 font-bold text-sm shadow-md shadow-cyan-500/20 hover:brightness-110 transition flex items-center justify-center gap-2 shrink-0"
           >
-            <span>Search Curriculum</span>
+            <span>{content.description}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
         {/* Quick Suggestion Pills */}
         <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-slate-400 font-mono text-[11px] shrink-0">Popular:</span>
+          <span className="text-slate-400 font-mono text-[11px] shrink-0">{content.eyebrow}</span>
           {POPULAR_KEYWORDS.map((kw) => (
             <button
               key={kw}

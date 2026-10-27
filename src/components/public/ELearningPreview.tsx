@@ -10,6 +10,7 @@ import {
   Laptop,
   GraduationCap
 } from 'lucide-react';
+import { storageService } from '../../services/storage';
 
 interface ELearningPreviewProps {
   onOpenAuth: () => void;
@@ -21,6 +22,7 @@ export const ELearningPreview: React.FC<ELearningPreviewProps> = ({
   onExploreCourses,
 }) => {
   const [selectedDemoTab, setSelectedDemoTab] = useState<'video' | 'verilog' | 'assignment'>('verilog');
+  const content = storageService.getSiteContent().eLearning;
 
   return (
     <section className="py-16 sm:py-20 relative overflow-hidden bg-slate-900/40">
@@ -28,14 +30,13 @@ export const ELearningPreview: React.FC<ELearningPreviewProps> = ({
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800 text-cyan-300 text-xs font-mono">
             <Laptop className="w-3.5 h-3.5" />
-            <span>STUDENT LEARNING MANAGEMENT SYSTEM (LMS)</span>
+            <span>{content.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Inside the Design Silicon E-Learning Portal
+            {content.title}
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Enrolled students get high-definition lectures, interactive synthesizable Verilog code
-            viewers, downloadable specification sheets, and automated assignment progress tracking.
+            {content.description}
           </p>
         </div>
 
@@ -173,7 +174,7 @@ module sync_fifo #(
                       Session 1.1: CMOS Gate Delays &amp; Setup/Hold Equation Proofs
                     </div>
                     <div className="text-xs text-slate-400 font-mono mt-1">
-                      Instructor: Bhavani Bhaskar &bull; 4K Digital Master &bull; 25 mins
+                      Instructor: DSV Training Team &bull; 4K Digital Master &bull; 25 mins
                     </div>
                   </div>
                 </div>

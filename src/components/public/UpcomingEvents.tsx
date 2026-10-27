@@ -13,6 +13,7 @@ import {
 import { EventItem } from '../../types';
 import { storageService } from '../../services/storage';
 import { useToast } from '../../context/ToastContext';
+import { storageService as contentStorage } from '../../services/storage';
 
 interface UpcomingEventsProps {
   onOpenApply: () => void;
@@ -21,6 +22,7 @@ interface UpcomingEventsProps {
 export const UpcomingEvents: React.FC<UpcomingEventsProps> = () => {
   const { showToast } = useToast();
   const events = storageService.getEvents().filter((e) => e.published);
+  const content = contentStorage.getSiteContent().events;
 
   const [registerModalEvent, setRegisterModalEvent] = useState<EventItem | null>(null);
   const [name, setName] = useState('');
@@ -64,14 +66,13 @@ export const UpcomingEvents: React.FC<UpcomingEventsProps> = () => {
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800 text-cyan-300 text-xs font-mono">
             <Calendar className="w-3.5 h-3.5" />
-            <span>LIVE WORKSHOPS &amp; TECH WEBINARS</span>
+            <span>{content.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Upcoming VLSI Events
+            {content.title}
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Attend live interactive masterclasses on Clock Domain Crossing (CDC), AXI4 protocol packet
-            traces, and technical interview problem solving.
+            {content.description}
           </p>
         </div>
 

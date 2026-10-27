@@ -271,6 +271,14 @@ export interface Announcement {
   active: boolean;
 }
 
+export interface SiteSectionContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+}
+
+export type SiteContent = Record<string, SiteSectionContent>;
+
 export interface NotificationItem {
   id: string;
   userId?: string; // empty means for admin

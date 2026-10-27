@@ -1,14 +1,16 @@
 import React from 'react';
 import { Star, ShieldCheck, Quote, Building2, CheckCircle2 } from 'lucide-react';
+import { storageService } from '../../services/storage';
 
 export const TestimonialsSection: React.FC = () => {
+  const content = storageService.getSiteContent().testimonials;
   const reviews = [
     {
       name: 'Vikas Chennupati',
       role: 'RTL Design Engineer at Tier-1 Semiconductor MNC',
       batch: 'Advanced RTL Batch #22',
       quote:
-        'Before DSV, I thought Verilog was just if-else and case statements. Bhavani Bhaskar sir completely rebuilt how I visualize hardware: clock tree delays, registered outputs, and async FIFO Gray code synchronization. In my interview, the entire technical round was on my DSV dual-clock FIFO project!',
+        'Before DSV, I thought Verilog was just if-else and case statements. The DSV Training Team helped me understand clock tree delays, registered outputs, and async FIFO Gray code synchronization. In my interview, the entire technical round was on my DSV dual-clock FIFO project!',
       verified: true
     },
     {
@@ -16,7 +18,7 @@ export const TestimonialsSection: React.FC = () => {
       role: 'Design Verification Engineer',
       batch: 'UVM Mastery Cohort #16',
       quote:
-        'Komali ma’am’s UVM sessions are pure gold. Building a complete UVM testbench with agents, scoreboards, and TLM analysis fifos from scratch gave me the confidence to debug real IP testbenches on day one of joining my company.',
+        'The DSV Training Team’s UVM sessions are excellent. Building a complete UVM testbench with agents, scoreboards, and TLM analysis fifos from scratch gave me the confidence to debug real IP testbenches on day one of joining my company.',
       verified: true
     },
     {
@@ -35,14 +37,13 @@ export const TestimonialsSection: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/70 border border-emerald-800 text-emerald-300 text-xs font-mono">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>GENUINE STUDENT OUTCOMES</span>
+            <span>{content.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Alumni Feedback &amp; Silicon Outcomes
+            {content.title}
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Real feedback from engineers who transitioned into core semiconductor product roles.
-            We honor our pledge never to advertise unverified claims.
+            {content.description}
           </p>
         </div>
 

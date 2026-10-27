@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { HelpCircle, ChevronDown, ChevronUp, ArrowRight } from 'lucide-react';
+import { storageService } from '../../services/storage';
 
 interface FAQSectionProps {
   onOpenApply: () => void;
@@ -8,11 +9,12 @@ interface FAQSectionProps {
 
 export const FAQSection: React.FC<FAQSectionProps> = ({ onOpenApply, onOpenChat }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const content = storageService.getSiteContent().faq;
 
   const faqs = [
     {
       q: 'Do you offer online or offline classroom batches?',
-      a: 'We offer both! Our state-of-the-art offline training center is located in HITEC City, Hyderabad. In addition, all lectures are streamed live online with interactive 2-way audio and high-performance remote cloud lab workstations with Synopsys/Questa toolchains.',
+      a: 'We offer both! Our offline training center is located in Marathahalli, Bengaluru. In addition, all lectures are streamed live online with interactive 2-way audio and high-performance remote cloud lab workstations with Synopsys/Questa toolchains.',
     },
     {
       q: 'I am a fresher from an ECE/EEE background. Can I join Advanced RTL or UVM?',
@@ -42,13 +44,13 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ onOpenApply, onOpenChat 
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800 text-cyan-300 text-xs font-mono">
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>COMMONLY ASKED QUESTIONS</span>
+            <span>{content.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Frequently Asked Questions
+            {content.title}
           </h2>
           <p className="text-sm text-slate-300">
-            Everything you need to know about admissions, lab access, and our semiconductor programs.
+            {content.description}
           </p>
         </div>
 

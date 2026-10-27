@@ -24,6 +24,7 @@ export const FeaturedCourses: React.FC<FeaturedCoursesProps> = ({
   filterQuery = '',
 }) => {
   const allCourses = storageService.getCourses();
+  const content = storageService.getSiteContent().courses;
 
   // Filter published courses
   const filtered = allCourses
@@ -46,13 +47,13 @@ export const FeaturedCourses: React.FC<FeaturedCoursesProps> = ({
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800 text-cyan-300 text-xs font-mono mb-2">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>SPECIALIZED SILICON DOMAINS</span>
+              <span>{content.eyebrow}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-              {filterQuery ? `Search Results for "${filterQuery}"` : 'Featured VLSI Programs'}
+              {filterQuery ? `Search Results for "${filterQuery}"` : content.title}
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 mt-1">
-              Curated, industry-aligned programs instructed by practicing principal architects.
+              {content.description}
             </p>
           </div>
 

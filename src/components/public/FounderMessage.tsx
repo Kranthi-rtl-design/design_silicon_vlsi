@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Quote, Sparkles, CheckCircle2, ChevronRight, X, Award } from 'lucide-react';
 import { assetPath } from '../../utils/assetPath';
+import { storageService } from '../../services/storage';
 
 export const FounderMessage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const content = storageService.getSiteContent().founder;
 
   return (
     <section className="py-16 sm:py-20 relative overflow-hidden bg-slate-900/60 border-y border-slate-800">
@@ -35,18 +37,16 @@ export const FounderMessage: React.FC = () => {
           <div className="lg:col-span-8 space-y-4">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/70 border border-amber-800 text-amber-300 text-xs font-mono">
               <Award className="w-3.5 h-3.5" />
-              <span>A NOTE FROM THE FOUNDER</span>
+              <span>{content.eyebrow}</span>
             </div>
 
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug">
-              "We Don't Teach Synthesizable Verilog from Textbooks. We Teach It from Silicon Failures."
+              {content.title}
             </h2>
 
             <div className="space-y-3 text-sm text-slate-300 leading-relaxed">
               <p>
-                In the semiconductor industry, a single race condition or missed CDC synchronizer can
-                brick a multimillion-dollar mask tapeout. Yet, most college graduates are taught
-                Verilog as if it were a sequential scripting language like C or Python.
+                {content.description}
               </p>
               <p>
                 I founded <strong>Design Silicon VLSI</strong> to break that disconnect. Here, you
@@ -65,7 +65,7 @@ export const FounderMessage: React.FC = () => {
               </button>
 
               <div className="text-xs text-slate-400 font-mono hidden sm:block">
-                &mdash; Hyderabad &bull; Silicon-Ready Curriculum
+                &mdash; Bengaluru &bull; Silicon-Ready Curriculum
               </div>
             </div>
           </div>

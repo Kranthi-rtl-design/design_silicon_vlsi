@@ -58,6 +58,7 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
   const [paymentRecords, setPaymentRecords] = useState(storageService.getPaymentRecords());
   const [assignments, setAssignments] = useState(storageService.getAssignments());
   const [notifications, setNotifications] = useState(storageService.getNotifications());
+  const [siteContent, setSiteContent] = useState(storageService.getSiteContent());
 
   useEffect(() => {
     const unsub = subscribeToDataChanges(() => {
@@ -70,6 +71,7 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
       setPaymentRecords(storageService.getPaymentRecords());
       setAssignments(storageService.getAssignments());
       setNotifications(storageService.getNotifications());
+      setSiteContent(storageService.getSiteContent());
     });
     return unsub;
   }, [user]);
@@ -218,15 +220,13 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
               <div className="space-y-2 relative z-10">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-300 text-xs font-mono">
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>ENROLLED COHORT: BATCH #28</span>
+                  <span>{siteContent.studentDashboard.eyebrow}</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-                  Welcome Back, {student?.name || 'Rahul Verma'}!
+                  {siteContent.studentDashboard.title.replace('{name}', student?.name || 'Rahul Verma')}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
-                  You are making strong progress in{' '}
-                  <strong className="text-cyan-300">{activeCourse.title}</strong>. Your next live
-                  lab on Gray-coded asynchronous FIFOs is scheduled for this Saturday.
+                  {siteContent.studentDashboard.description}
                 </p>
               </div>
 
@@ -339,7 +339,7 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
                     {schedules[0]?.topic || 'Dual-Clock Asynchronous FIFO Design & Gray Code Math'}
                   </h3>
                   <div className="text-xs text-slate-400 mt-2 space-y-1">
-                    <div>Trainer: <span className="text-slate-200">{schedules[0]?.trainer || 'Bhavani Bhaskar'}</span></div>
+                    <div>Trainer: <span className="text-slate-200">{schedules[0]?.trainer || 'DSV Training Team'}</span></div>
                     <div>Batch: <span className="text-slate-200">{schedules[0]?.batch || 'Batch #28 (Weekend)'}</span></div>
                   </div>
                 </div>
@@ -363,10 +363,9 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
           <div className="space-y-6 animate-fade-in">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-white">Enrolled Specializations</h2>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Access your course curriculums, lesson archives, and certifications.
-                </p>
+                <span className="text-[10px] font-mono text-cyan-400">{siteContent.studentCourses.eyebrow}</span>
+                <h2 className="text-2xl font-bold text-white">{siteContent.studentCourses.title}</h2>
+                <p className="text-xs text-slate-400 mt-0.5">{siteContent.studentCourses.description}</p>
               </div>
             </div>
 
@@ -436,6 +435,11 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
         {/* ======================= 3. LEARNING (LMS CLASSROOM) ======================= */}
         {activeTab === 'learning' && (
           <div className="space-y-4 animate-fade-in">
+            <div>
+              <span className="text-[10px] font-mono text-cyan-400">{siteContent.studentLearning.eyebrow}</span>
+              <h2 className="text-2xl font-bold text-white">{siteContent.studentLearning.title}</h2>
+              <p className="text-xs text-slate-400 mt-0.5">{siteContent.studentLearning.description}</p>
+            </div>
             {/* Top Bar for Learning Workspace */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
@@ -593,10 +597,9 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
         {activeTab === 'assignments' && (
           <div className="space-y-6 animate-fade-in">
             <div>
-              <h2 className="text-2xl font-bold text-white">Course Assignments &amp; Projects</h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Upload your Verilog RTL models and testbench scripts for faculty code review.
-              </p>
+              <span className="text-[10px] font-mono text-cyan-400">{siteContent.studentAssignments.eyebrow}</span>
+              <h2 className="text-2xl font-bold text-white">{siteContent.studentAssignments.title}</h2>
+              <p className="text-xs text-slate-400 mt-0.5">{siteContent.studentAssignments.description}</p>
             </div>
 
             <div className="space-y-4">
@@ -668,10 +671,9 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
         {activeTab === 'schedule' && (
           <div className="space-y-6 animate-fade-in">
             <div>
-              <h2 className="text-2xl font-bold text-white">Live Batch Timetable</h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Real-time class links updated automatically by institute faculty.
-              </p>
+              <span className="text-[10px] font-mono text-cyan-400">{siteContent.studentSchedule.eyebrow}</span>
+              <h2 className="text-2xl font-bold text-white">{siteContent.studentSchedule.title}</h2>
+              <p className="text-xs text-slate-400 mt-0.5">{siteContent.studentSchedule.description}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -716,10 +718,9 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
         {activeTab === 'payments' && (
           <div className="space-y-6 animate-fade-in">
             <div>
-              <h2 className="text-2xl font-bold text-white">Tuition &amp; Fee Receipts</h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Transparent accounting of total fee, payments made, and next due date.
-              </p>
+              <span className="text-[10px] font-mono text-cyan-400">{siteContent.studentPayments.eyebrow}</span>
+              <h2 className="text-2xl font-bold text-white">{siteContent.studentPayments.title}</h2>
+              <p className="text-xs text-slate-400 mt-0.5">{siteContent.studentPayments.description}</p>
             </div>
 
             {/* Financial Overview Cards */}
@@ -804,8 +805,9 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
           <div className="space-y-6 animate-fade-in max-w-3xl">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-white">Institute Notices &amp; Alerts</h2>
-                <p className="text-xs text-slate-400 mt-0.5">Announcements from faculty and admissions.</p>
+                <span className="text-[10px] font-mono text-cyan-400">{siteContent.studentNotifications.eyebrow}</span>
+                <h2 className="text-2xl font-bold text-white">{siteContent.studentNotifications.title}</h2>
+                <p className="text-xs text-slate-400 mt-0.5">{siteContent.studentNotifications.description}</p>
               </div>
               <button
                 onClick={() => {
@@ -844,8 +846,9 @@ export const StudentPortal: React.FC<{ onBackToHome: () => void }> = ({ onBackTo
         {activeTab === 'profile' && (
           <div className="space-y-6 animate-fade-in max-w-2xl">
             <div>
-              <h2 className="text-2xl font-bold text-white">Student Profile</h2>
-              <p className="text-xs text-slate-400 mt-0.5">Your official registration details.</p>
+              <span className="text-[10px] font-mono text-cyan-400">{siteContent.studentProfile.eyebrow}</span>
+              <h2 className="text-2xl font-bold text-white">{siteContent.studentProfile.title}</h2>
+              <p className="text-xs text-slate-400 mt-0.5">{siteContent.studentProfile.description}</p>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">

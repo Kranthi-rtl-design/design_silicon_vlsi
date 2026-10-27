@@ -9,8 +9,10 @@ import {
   CheckCircle2,
   ArrowUpRight
 } from 'lucide-react';
+import { storageService } from '../../services/storage';
 
 export const WhyChooseUs: React.FC = () => {
+  const content = storageService.getSiteContent().whyChooseUs;
   const values = [
     {
       icon: Layers,
@@ -67,7 +69,7 @@ export const WhyChooseUs: React.FC = () => {
       title: 'Dedicated Mentorship',
       subtitle: 'Direct Feedback from Chip Veterans',
       description:
-        'Direct 1-on-1 code reviews with Principal RTL Architects and Senior Verification Specialists like Bhavani Bhaskar and Komali. We debug your testbenches with you.',
+        'Direct 1-on-1 code reviews with the DSV Training Team and industry mentors. We debug your testbenches with you.',
       color: 'from-rose-500/20 to-orange-500/10',
       border: 'border-rose-500/30',
       iconColor: 'text-rose-400'
@@ -79,14 +81,13 @@ export const WhyChooseUs: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800 text-cyan-300 text-xs font-mono">
-            <span>THE DESIGN SILICON PHILOSOPHY</span>
+            <span>{content.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Why Design Silicon VLSI?
+            {content.title}
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            We don't teach rote textbook syntax or use unverified placement claims.
-            We train engineers the way Tier-1 semiconductor design centers demand.
+            {content.description}
           </p>
         </div>
 

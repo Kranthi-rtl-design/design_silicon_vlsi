@@ -52,7 +52,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [regEducation, setRegEducation] = useState('B.Tech ECE');
   const [regYearOfPassout, setRegYearOfPassout] = useState('2025');
   const [regExperience, setRegExperience] = useState<'Fresher' | '1-2 Years' | '3+ Years'>('Fresher');
-  const [regCity, setRegCity] = useState('Hyderabad');
+  const [regCity, setRegCity] = useState('Bengaluru');
   const [showRegPassword, setShowRegPassword] = useState(false);
 
   if (!isOpen) return null;

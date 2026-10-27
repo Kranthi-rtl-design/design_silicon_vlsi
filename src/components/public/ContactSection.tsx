@@ -14,6 +14,7 @@ import { useToast } from '../../context/ToastContext';
 
 export const ContactSection: React.FC = () => {
   const { showToast } = useToast();
+  const content = storageService.getSiteContent().contact;
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -55,14 +56,13 @@ export const ContactSection: React.FC = () => {
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800 text-cyan-300 text-xs font-mono mb-2">
                 <MapPin className="w-3.5 h-3.5" />
-                <span>VISIT US OR GET IN TOUCH</span>
+                <span>{content.eyebrow}</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Connect with Design Silicon VLSI
+                {content.title}
               </h2>
               <p className="text-sm text-slate-300 mt-2 leading-relaxed">
-                Whether you want to inspect our physical hardware labs in Hyderabad, discuss corporate
-                training for your engineering team, or ask about batch schedules, we are here to help.
+                {content.description}
               </p>
             </div>
 
@@ -72,9 +72,9 @@ export const ContactSection: React.FC = () => {
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-white">Hyderabad Training Center</div>
+                  <div className="text-sm font-bold text-white">Bengaluru Campus</div>
                   <div className="text-xs text-slate-300 mt-0.5 leading-relaxed">
-                    Level 3, Silicon Tech Towers, Near Cyber Gateway, HITEC City, Hyderabad, Telangana 500081
+                    305, 3rd Floor, REMD Residency, 1st Main Road, Kaveri Layout, Marathahalli, Bengaluru 560037
                   </div>
                 </div>
               </div>
